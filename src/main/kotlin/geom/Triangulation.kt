@@ -5,6 +5,7 @@ import utils.faceThatContainsVtx
 
 class Triangulation(private val mPoints: List<Point>, point1: Int, point2: Int, point3: Int) {
     val mTriangles: ArrayList<Triangle> = ArrayList()
+    val mEdges: ArrayList<Edge> = ArrayList()
 
     init {
         val triangle = Triangle(

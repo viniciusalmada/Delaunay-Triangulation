@@ -1,4 +1,3 @@
-/*
 package topo
 
 import geom.Point
@@ -54,7 +53,7 @@ object WingedEdge {
         return orientation(a, b, pt)
     }
 
-    data class WEVertex(val x: Double, val y: Double, val elem: Int)
+    data class WEVertex(val x: Double, val y: Double, val edge: Int)
 
     data class WEFace(val edge0: Int, val edge1: Int, val edge2: Int)
 
@@ -63,11 +62,6 @@ object WingedEdge {
         val vtxFinal: Int,
         val faceLeft: Int,
         val faceRight: Int,
-        val edgeLeftPrev: Int,
-        val edgeLeftNext: Int,
-        val edgeRightPrev: Int,
-        val edgeRightNext: Int,
     )
 
 }
-*/
