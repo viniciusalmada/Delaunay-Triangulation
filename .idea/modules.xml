@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/DelaunayTriangulations.iml" filepath="$PROJECT_DIR$/DelaunayTriangulations.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Delaunay-Triangulation-Kt.iml" filepath="$PROJECT_DIR$/Delaunay-Triangulation-Kt.iml" />
     </modules>
   </component>
 </project>
