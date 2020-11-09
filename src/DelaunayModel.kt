@@ -67,14 +67,14 @@ class DelaunayModel(points: List<CompGeom.Point>) {
     }
 
     /**
-     * This function creates a new topological HED Triangle and return its index.
+     * Creates a new topological HED Triangle and return its index.
      * Also, it set, for each half-edge provided, a next half-edge that forms the
      * triangle loop.
      *
      * @param h0 first HED half-edge
      * @param h1 second HED half-edge
      * @param h2 third HED half-edge
-     * @return the index of the new triangle created.
+     * @return the index of the new triangle created
      */
     private fun newTriangle(h0: Int, h1: Int, h2: Int): Int {
         mTriangles.push(Triangle(h0, h1, h2))
@@ -89,12 +89,12 @@ class DelaunayModel(points: List<CompGeom.Point>) {
     }
 
     /**
-     * This function creates a new topological HED Edge and return its index.
-     * Also, it set, for each half-edge provided, the edge property
+     * Creates a new topological HED Edge and return its index.
+     * Also, it set, for each half-edge provided, the edge property.
      *
      * @param h1Id HED half-edge from initial vertex
      * @param h2Id HED half-edge from final vertex
-     * @return the index of the new edge created.
+     * @return the index of the new edge created
      */
     private fun newEdge(h1Id: Int, h2Id: Int): Int {
         mEdges.push(Edge(h1Id, h2Id))
@@ -104,8 +104,8 @@ class DelaunayModel(points: List<CompGeom.Point>) {
     }
 
     /**
-     * This function creates a new topological HED Half-edge and return its index.
-     * Also, it set, for the vertex provided, the half-edge property
+     * Creates a new topological HED Half-edge and return its index.
+     * Also, it set, for the vertex provided, the half-edge property.
      *
      * @param vertexId HED vertex reference
      * @return the index of the new half-edge created.
@@ -117,10 +117,10 @@ class DelaunayModel(points: List<CompGeom.Point>) {
     }
 
     /**
-     * This function creates a new topological HED Vertex and return its index.
+     * Creates a new topological HED Vertex and return its index.
      *
-     * @param pt 2D geometrical point
-     * @return the index of the new vertex created.
+     * @param pt 2D geometric point
+     * @return the index of the new vertex created
      */
     private fun newVertex(pt: CompGeom.Point): Int {
         mVertices.push(Vertex(pt))
@@ -128,7 +128,7 @@ class DelaunayModel(points: List<CompGeom.Point>) {
     }
 
     /**
-     * This function update the half-edge property to a given vertex.
+     * Update the half-edge property to a given vertex.
      *
      * @param vtx vertex index to be updated
      * @param hed new half-edge reference index
@@ -138,7 +138,7 @@ class DelaunayModel(points: List<CompGeom.Point>) {
     }
 
     /**
-     * This function update the half-edges properties to a given triangle.
+     * Update the half-edges properties to a given triangle.
      *
      * @param tri triangle index to be updated
      * @param hed0 new first half-edge reference index
@@ -160,7 +160,7 @@ class DelaunayModel(points: List<CompGeom.Point>) {
     }
 
     /**
-     * This function update the vertex property to a given half-edge.
+     * Update the vertex property to a given half-edge.
      *
      * @param hed half-edge index to be updated
      * @param vtx new vertex reference index
@@ -169,8 +169,13 @@ class DelaunayModel(points: List<CompGeom.Point>) {
         mHalfEdges[hed].vtx = vtx
     }
 
-    // GETTERS
-
+    /**
+     * Get half edge reference from a triangle.
+     *
+     * @param triId triangle index
+     * @param i triangle vertex type (it can be [V0],[V1] or [V2])
+     * @return half-edge reference
+     */
     private fun getHalfEdgeFromTriangle(triId: Int, i: Triangle.TriVtx): Int {
         val tri = mTriangles[triId]
         return when (i) {
@@ -180,10 +185,23 @@ class DelaunayModel(points: List<CompGeom.Point>) {
         }
     }
 
+    /**
+     * Get vertex reference of a triangle.
+     *
+     * @param triId triangle index
+     * @param i triangle vertex type (it can be [V0],[V1] or [V2])
+     * @return vertex reference
+     */
     private fun getVertexOfTriangle(triId: Int, i: Triangle.TriVtx): Int {
         return mHalfEdges[getHalfEdgeFromTriangle(triId, i)].vtx
     }
 
+    /**
+     * Get all vertices of a triangle.
+     *
+     * @param triId triangle index
+     * @return an array with three vertices reference
+     */
     private fun getVerticesOfTriangle(triId: Int): IntArray {
         val v0 = getVertexOfTriangle(triId, V0)
         val v1 = getVertexOfTriangle(triId, V1)
@@ -192,14 +210,32 @@ class DelaunayModel(points: List<CompGeom.Point>) {
         return intArrayOf(v0, v1, v2)
     }
 
+    /**
+     * Get half edge from a vertex.
+     *
+     * @param vtxId vertex index
+     * @return half-edge reference
+     */
     private fun getHalfEdgeFromVertex(vtxId: Int): Int {
         return mVertices[vtxId].hed
     }
 
+    /**
+     * Get edge reference from a half edge.
+     *
+     * @param hed half-edge index
+     * @return edge reference
+     */
     private fun getEdgeFromHalfEdge(hed: Int): Int {
         return mHalfEdges[hed].edge
     }
 
+    /**
+     * Get all near edges from a given vertex (or vertices).
+     *
+     * @param vertices vertex index
+     * @return a list of edges references
+     */
     private fun getNearEdges(vararg vertices: Int): Stack<Int> {
         val edges = Stack<Int>()
         vertices@ for (vtxId in vertices) {
@@ -240,6 +276,12 @@ class DelaunayModel(points: List<CompGeom.Point>) {
         return edges
     }
 
+    /**
+     * Get half-edge mate
+     *
+     * @param hed half-edge index
+     * @return half-edge mate reference
+     */
     private fun getMateOfHalfEdge(hed: Int): Int {
         val edge = mHalfEdges[hed].edge
         val hed1 = mEdges[edge].hed1
@@ -248,28 +290,56 @@ class DelaunayModel(points: List<CompGeom.Point>) {
         return if (hed == hed1) hed2 else hed1
     }
 
+    /**
+     * Get triangle of a half-edge
+     *
+     * @param hed half-edge index
+     * @return triangle reference
+     */
     private fun getTriangleOfHalfEdge(hed: Int): Int {
         return mHalfEdges[hed].tri
     }
 
+    /**
+     * Get next half-edge reference of a given half-edge
+     *
+     * @param hed half-edge index
+     * @return next half-edge reference
+     */
     private fun getNextOfHalfEdge(hed: Int): Int {
         return mHalfEdges[hed].next
     }
 
+    /**
+     * Get geometric point of half-edge
+     *
+     * @param hed half-edge index
+     * @return geometric point
+     */
     private fun getPointOfHalfEdge(hed: Int): CompGeom.Point {
         val vtx = getVertexOfHalfEdge(hed)
         return mVertices[vtx].pt
     }
 
+    /**
+     * Get vertex of a half-edge
+     *
+     * @param hed half-edge index
+     * @return vertex reference
+     */
     private fun getVertexOfHalfEdge(hed: Int): Int {
         return mHalfEdges[hed].vtx
     }
 
+    /**
+     * Get geometric point of vertex
+     *
+     * @param vtx vertex index
+     * @return geometric point
+     */
     private fun getPointOfVertex(vtx: Int): CompGeom.Point {
         return mVertices[vtx].pt
     }
-
-    // UTILS
 
     private fun verifyVertices(vararg vertices: Int) {
         for (vtxId in vertices) {
