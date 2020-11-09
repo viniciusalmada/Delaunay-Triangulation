@@ -88,6 +88,14 @@ class DelaunayModel(points: List<CompGeom.Point>) {
         return mTriangles.lastIndex
     }
 
+    /**
+     * This function creates a new topological HED Edge and return its index.
+     * Also, it set, for each half-edge provided, the edge property
+     *
+     * @param h1Id HED half-edge from initial vertex
+     * @param h2Id HED half-edge from final vertex
+     * @return the index of the new edge created.
+     */
     private fun newEdge(h1Id: Int, h2Id: Int): Int {
         mEdges.push(Edge(h1Id, h2Id))
         mHalfEdges[h1Id].edge = mEdges.lastIndex
@@ -95,12 +103,25 @@ class DelaunayModel(points: List<CompGeom.Point>) {
         return mEdges.lastIndex
     }
 
+    /**
+     * This function creates a new topological HED Half-edge and return its index.
+     * Also, it set, for the vertex provided, the half-edge property
+     *
+     * @param vertexId HED vertex reference
+     * @return the index of the new half-edge created.
+     */
     private fun newHalfEdge(vertexId: Int): Int {
         mHalfEdges.push(HalfEdge(vertexId))
         mVertices[vertexId].hed = mHalfEdges.lastIndex
         return mHalfEdges.lastIndex
     }
 
+    /**
+     * This function creates a new topological HED Vertex and return its index.
+     *
+     * @param pt 2D geometrical point
+     * @return the index of the new vertex created.
+     */
     private fun newVertex(pt: CompGeom.Point): Int {
         mVertices.push(Vertex(pt))
         return mVertices.lastIndex
