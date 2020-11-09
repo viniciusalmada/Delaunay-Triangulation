@@ -277,7 +277,7 @@ class DelaunayModel(points: List<CompGeom.Point>) {
     }
 
     /**
-     * Get half-edge mate
+     * Get half-edge mate.
      *
      * @param hed half-edge index
      * @return half-edge mate reference
@@ -291,7 +291,7 @@ class DelaunayModel(points: List<CompGeom.Point>) {
     }
 
     /**
-     * Get triangle of a half-edge
+     * Get triangle of a half-edge.
      *
      * @param hed half-edge index
      * @return triangle reference
@@ -301,7 +301,7 @@ class DelaunayModel(points: List<CompGeom.Point>) {
     }
 
     /**
-     * Get next half-edge reference of a given half-edge
+     * Get next half-edge reference of a given half-edge.
      *
      * @param hed half-edge index
      * @return next half-edge reference
@@ -311,7 +311,7 @@ class DelaunayModel(points: List<CompGeom.Point>) {
     }
 
     /**
-     * Get geometric point of half-edge
+     * Get geometric point of half-edge.
      *
      * @param hed half-edge index
      * @return geometric point
@@ -322,7 +322,7 @@ class DelaunayModel(points: List<CompGeom.Point>) {
     }
 
     /**
-     * Get vertex of a half-edge
+     * Get vertex of a half-edge.
      *
      * @param hed half-edge index
      * @return vertex reference
@@ -332,7 +332,7 @@ class DelaunayModel(points: List<CompGeom.Point>) {
     }
 
     /**
-     * Get geometric point of vertex
+     * Get geometric point of vertex.
      *
      * @param vtx vertex index
      * @return geometric point
@@ -341,7 +341,13 @@ class DelaunayModel(points: List<CompGeom.Point>) {
         return mVertices[vtx].pt
     }
 
-    private fun verifyVertices(vararg vertices: Int) {
+    /**
+     * Verify legal near edges from vertices.
+     * If any edge is illegal, make a edge flip.
+     *
+     * @param vertices vertices to verify
+     */
+    private fun verifyLegalNearEdgesFromVertices(vararg vertices: Int) {
         for (vtxId in vertices) {
             val edges = getNearEdges(vtxId)
             for (e in edges) {
@@ -352,6 +358,14 @@ class DelaunayModel(points: List<CompGeom.Point>) {
         }
     }
 
+    /**
+     * Check if an edge is legal.
+     * For all purposes, an legal edge must be near of two triangles and
+     * the circle formed by the end points of the edge and
+     *
+     * @param e
+     * @return
+     */
     private fun isEdgeLegal(e: Int): Boolean {
         if (!isEdgeNearTwoFaces(e)) return true
 
@@ -412,7 +426,7 @@ class DelaunayModel(points: List<CompGeom.Point>) {
         updateHalfEdgesOfTriangle(tri1, edge.hed1, nextNextHed2, nextHed1)
         updateHalfEdgesOfTriangle(tri2, edge.hed2, nextNextHed1, nextHed2)
 
-        verifyVertices(newVtxOfHed1, newVtxOfHed2)
+        verifyLegalNearEdgesFromVertices(newVtxOfHed1, newVtxOfHed2)
     }
 
     private fun isEdgeNearTwoFaces(e: Int): Boolean {
@@ -529,7 +543,7 @@ class DelaunayModel(points: List<CompGeom.Point>) {
 
         updateHalfEdgesOfTriangle(tri, h0Tri0, h2e1, h1e0)
 
-        verifyVertices(verticesToCheck[0], verticesToCheck[1], verticesToCheck[2])
+        verifyLegalNearEdgesFromVertices(verticesToCheck[0], verticesToCheck[1], verticesToCheck[2])
     }
 
     private fun finish() {
