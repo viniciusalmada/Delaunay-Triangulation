@@ -9,6 +9,30 @@ import java.io.File
 import java.util.*
 import kotlin.collections.HashMap
 
+/**
+ * Class that represents a model for Delaunay Triangulation construction from
+ * a given set of 2D points.
+ *
+ * This class use Half-Edge [HED] topological data structure to provide better queries on
+ * editing and adding triangles, edges and vertices to model.
+ *
+ * The first step is create a triangle (three vertices) that contains all given points.
+ * This triangle is only a helper to create the Delaunay Triangulation, after all points
+ * are processed, it must be excluded.
+ *
+ * It is done with maps created including only those vertices and triangles of the
+ * original set of given points.
+ *
+ * @param points list of three 2D base points for Delaunay Triangulation
+ * @property mVertices set of HED vertices including first base points
+ * @property mHalfEdges set of HED half-edges
+ * @property mEdges set of HED edges
+ * @property mTriangles set of HED triangles including those with first base points
+ * @property mVerticesFinal map of HED vertices without the first base points
+ * @property mTrianglesFinal map of HED triangles excluding those with first base points
+ * @constructor Creates the first triangle formed by three vertices calculated to include all
+ * points inside itself.
+ */
 class DelaunayModel(points: List<CompGeom.Point>) {
     private val mVertices: Stack<Vertex> = Stack()
     private val mHalfEdges: Stack<HalfEdge> = Stack()
@@ -19,24 +43,18 @@ class DelaunayModel(points: List<CompGeom.Point>) {
     private val mTrianglesFinal: HashMap<Int, Triangle> = HashMap()
 
     init {
-        val box = CompGeom.triangleBox(points)
+        val box: List<CompGeom.Point> = CompGeom.triangleBox(points)
 
-        val v0 = newVertex(box[0])
-        val v1 = newVertex(box[1])
-        val v2 = newVertex(box[2])
+        val v0: Int = newVertex(box[0])
+        val v1: Int = newVertex(box[1])
+        val v2: Int = newVertex(box[2])
 
-        //          edge 0
-        // (v0)------------------>(v1)
-        //          edge 1
-        // (v1)------------------>(v2)
-        //          edge 2
-        // (v2)------------------>(v0)
-        val h1e0 = newHalfEdge(v0)
-        val h2e0 = newHalfEdge(v1)
-        val h1e1 = newHalfEdge(v1)
-        val h2e1 = newHalfEdge(v2)
-        val h1e2 = newHalfEdge(v2)
-        val h2e2 = newHalfEdge(v0)
+        val h1e0: Int = newHalfEdge(v0)
+        val h2e0: Int = newHalfEdge(v1)
+        val h1e1: Int = newHalfEdge(v1)
+        val h2e1: Int = newHalfEdge(v2)
+        val h1e2: Int = newHalfEdge(v2)
+        val h2e2: Int = newHalfEdge(v0)
 
         newEdge(h1e0, h2e0)
         newEdge(h1e1, h2e1)
