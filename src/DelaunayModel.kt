@@ -66,8 +66,16 @@ class DelaunayModel(points: List<CompGeom.Point>) {
         finish()
     }
 
-    // CREATORS
-
+    /**
+     * This function creates a new topological HED Triangle and return its index.
+     * Also, it set, for each half-edge provided, a next half-edge that forms the
+     * triangle loop.
+     *
+     * @param h0 first HED half-edge
+     * @param h1 second HED half-edge
+     * @param h2 third HED half-edge
+     * @return the index of the new triangle created.
+     */
     private fun newTriangle(h0: Int, h1: Int, h2: Int): Int {
         mTriangles.push(Triangle(h0, h1, h2))
         mHalfEdges[h0].tri = mTriangles.lastIndex
