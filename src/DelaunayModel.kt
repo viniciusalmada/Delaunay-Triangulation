@@ -127,12 +127,24 @@ class DelaunayModel(points: List<CompGeom.Point>) {
         return mVertices.lastIndex
     }
 
-    // SETTERS
-
-    private fun setHalfEdgeOfVertex(vtx: Int, hed: Int) {
+    /**
+     * This function update the half-edge property to a given vertex.
+     *
+     * @param vtx vertex index to be updated
+     * @param hed new half-edge reference index
+     */
+    private fun updateHalfEdgeOfVertex(vtx: Int, hed: Int) {
         mVertices[vtx].hed = hed
     }
 
+    /**
+     * This function update the half-edges properties to a given triangle.
+     *
+     * @param tri triangle index to be updated
+     * @param hed0 new first half-edge reference index
+     * @param hed1 new second half-edge reference index
+     * @param hed2 new third half-edge reference index
+     */
     private fun updateHalfEdgesOfTriangle(tri: Int, hed0: Int, hed1: Int, hed2: Int) {
         mTriangles[tri].hed0 = hed0
         mTriangles[tri].hed1 = hed1
@@ -147,7 +159,13 @@ class DelaunayModel(points: List<CompGeom.Point>) {
         mHalfEdges[hed2].next = hed0
     }
 
-    private fun setVertexOfHalfEdge(hed: Int, vtx: Int) {
+    /**
+     * This function update the vertex property to a given half-edge.
+     *
+     * @param hed half-edge index to be updated
+     * @param vtx new vertex reference index
+     */
+    private fun updateVertexOfHalfEdge(hed: Int, vtx: Int) {
         mHalfEdges[hed].vtx = vtx
     }
 
@@ -308,18 +326,18 @@ class DelaunayModel(points: List<CompGeom.Point>) {
         val vtx1 = getVertexOfHalfEdge(edge.hed1)
         val hedVtx1 = getHalfEdgeFromVertex(vtx1)
         if (hedVtx1 == edge.hed1)
-            setHalfEdgeOfVertex(vtx1, nextHed2)
+            updateHalfEdgeOfVertex(vtx1, nextHed2)
 
         val vtx2 = getVertexOfHalfEdge(edge.hed2)
         val hedVtx2 = getHalfEdgeFromVertex(vtx2)
         if (hedVtx2 == edge.hed2)
-            setHalfEdgeOfVertex(vtx2, nextHed1)
+            updateHalfEdgeOfVertex(vtx2, nextHed1)
 
         val newVtxOfHed1 = getVertexOfHalfEdge(nextNextHed1)
         val newVtxOfHed2 = getVertexOfHalfEdge(nextNextHed2)
 
-        setVertexOfHalfEdge(edge.hed1, newVtxOfHed1)
-        setVertexOfHalfEdge(edge.hed2, newVtxOfHed2)
+        updateVertexOfHalfEdge(edge.hed1, newVtxOfHed1)
+        updateVertexOfHalfEdge(edge.hed2, newVtxOfHed2)
 
         updateHalfEdgesOfTriangle(tri1, edge.hed1, nextNextHed2, nextHed1)
         updateHalfEdgesOfTriangle(tri2, edge.hed2, nextNextHed1, nextHed2)
