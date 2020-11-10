@@ -360,11 +360,18 @@ class DelaunayModel(points: List<CompGeom.Point>) {
 
     /**
      * Check if an edge is legal.
-     * For all purposes, an legal edge must be near of two triangles and
-     * the circle formed by the end points of the edge and
      *
-     * @param e
-     * @return
+     * For all purposes, the circle formed by the end points of the edge
+     * and third vertex of one near triangle may not contain another point.
+     *
+     * The polygon formed by the edge end points and the other vertices of
+     * near triangles, may be convex to continue verification, if not, edge
+     * is legal already.
+     *
+     * If the edge had these requisites, it is legal.
+     *
+     * @param e edge index
+     * @return true if edge is legal, false otherwise
      */
     private fun isEdgeLegal(e: Int): Boolean {
         if (!isEdgeNearTwoFaces(e)) return true
@@ -396,6 +403,11 @@ class DelaunayModel(points: List<CompGeom.Point>) {
         return false
     }
 
+    /**
+     * Make flip
+     *
+     * @param e
+     */
     private fun makeFlip(e: Int) {
         val edge = mEdges[e]
         val tri1 = getTriangleOfHalfEdge(edge.hed1)
