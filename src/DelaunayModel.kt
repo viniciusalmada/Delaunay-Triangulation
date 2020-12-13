@@ -42,7 +42,7 @@ class DelaunayModel(points: List<CompGeom.Point>) {
     private val mVerticesFinal: HashMap<Int, Vertex> = HashMap()
     private val mTrianglesFinal: HashMap<Int, Triangle> = HashMap()
 
-    private val mBigSide: Double;
+    private val mBigSide: Double
 
     init {
         val box: List<CompGeom.Point> = CompGeom.triangleBox(points)
