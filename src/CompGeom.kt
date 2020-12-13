@@ -23,6 +23,14 @@ object CompGeom {
             val y = this.y - pt.y
             return sqrt(x * x + y * y)
         }
+
+        infix fun dot(pt: Point): Double {
+            return x * pt.x + y * pt.y
+        }
+
+        fun norm(): Double {
+            return sqrt(x * x + y * y)
+        }
     }
 
     data class Circle(val center: Point, val radius: Double) {
