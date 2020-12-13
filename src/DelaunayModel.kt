@@ -42,8 +42,14 @@ class DelaunayModel(points: List<CompGeom.Point>) {
     private val mVerticesFinal: HashMap<Int, Vertex> = HashMap()
     private val mTrianglesFinal: HashMap<Int, Triangle> = HashMap()
 
+    private val mBigSide: Double;
+
     init {
         val box: List<CompGeom.Point> = CompGeom.triangleBox(points)
+        val dist01 = points[0].dist(points[1])
+        val dist12 = points[1].dist(points[2])
+        val dist20 = points[2].dist(points[0])
+        mBigSide = listOf(dist01, dist12, dist20).maxOf { it }
 
         val v0: Int = newVertex(box[0])
         val v1: Int = newVertex(box[1])
