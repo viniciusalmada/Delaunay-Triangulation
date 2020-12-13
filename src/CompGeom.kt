@@ -1,4 +1,3 @@
-import kotlin.math.abs
 import kotlin.math.sqrt
 
 object CompGeom {
@@ -24,13 +23,6 @@ object CompGeom {
             return sqrt(x * x + y * y)
         }
 
-        infix fun dot(pt: Point): Double {
-            return x * pt.x + y * pt.y
-        }
-
-        fun norm(): Double {
-            return sqrt(x * x + y * y)
-        }
     }
 
     data class Circle(val center: Point, val radius: Double) {
@@ -46,15 +38,6 @@ object CompGeom {
             det < 0.0 -> Orientation.RIGHT
             else -> Orientation.COLLINEAR
         }
-    }
-
-    private fun checkLinesCrossing(a: Point, b: Point, c: Point, d: Point): Boolean {
-        val abc = orientation(a, b, c)
-        val abd = orientation(a, b, d)
-        val cda = orientation(c, d, a)
-        val cdb = orientation(c, d, b)
-
-        return abc != abd && cda != cdb
     }
 
     private fun linesCrossingPoint(p1: Point, p2: Point, q1: Point, q2: Point): Point {
