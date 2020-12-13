@@ -485,7 +485,7 @@ class DelaunayModel(points: List<CompGeom.Point>) {
     }
 
     private fun addTriangle(pt: CompGeom.Point) {
-
+        printTriangles()
         val edge = findEdgeThatContainsPoint(pt)
 
         if (edge.isValid()) {
@@ -494,6 +494,8 @@ class DelaunayModel(points: List<CompGeom.Point>) {
         }
 
         val tri0 = findTriangleThatContainsPoint(pt)
+        if (tri0.isInvalid())
+            return
         splitTriangle(tri0, pt)
     }
 
@@ -530,6 +532,8 @@ class DelaunayModel(points: List<CompGeom.Point>) {
 
         updateHalfEdgesOfTriangle(tri1, hed3, nextHed1, hed7)
         updateHalfEdgesOfTriangle(tri2, hed5, nextNextHed2, hed2)
+
+        verifyLegalNearEdgesFromVertices(vtxNextNextHed1,vtxNextNextHed2)
     }
 
     private fun setHalfEdgesOfEdge(edgeId: Int, hed1: Int, hed2: Int) {
@@ -626,6 +630,42 @@ class DelaunayModel(points: List<CompGeom.Point>) {
         buffer.append("];\n")
 
         val file = File("../triangles.m").writer()
+        file.write(buffer.toString())
+
+        file.close()
+
+        return buffer.toString()
+    }
+
+    private fun printTriangles(): String {
+        val buffer = StringBuilder()
+        buffer.append("figure\n")
+        buffer.append("grid on\n")
+        buffer.append("% Generated ${mTriangles.size} triangles\n")
+        for (tri in mTriangles.indices) {
+            val vertices = getVerticesOfTriangle(tri)
+            val p0 = getPointOfVertex(vertices[0])
+            val p1 = getPointOfVertex(vertices[1])
+            val p2 = getPointOfVertex(vertices[2])
+            buffer.append("line([")
+            buffer.append("${p0.x},${p1.x},${p2.x},${p0.x}")
+            buffer.append("],[")
+            buffer.append("${p0.y},${p1.y},${p2.y},${p0.y}")
+            buffer.append("])\n")
+        }
+        buffer.append("axis equal\n\n")
+        buffer.append("x=[")
+        for (vtx in mVertices) {
+            buffer.append("${vtx.pt.x},")
+        }
+        buffer.append("];\n")
+        buffer.append("y=[")
+        for (vtx in mVertices) {
+            buffer.append("${vtx.pt.y},")
+        }
+        buffer.append("];\n")
+
+        val file = File("../trianglesD.m").writer()
         file.write(buffer.toString())
 
         file.close()
