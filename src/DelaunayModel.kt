@@ -399,10 +399,14 @@ class DelaunayModel(points: List<CompGeom.Point>) {
             return true
 
         val circle012 = CompGeom.circle3Points(p0, p1, p2)
+        val circle023 = CompGeom.circle3Points(p0, p2, p3)
+
+        if (circle012.radius == circle023.radius && circle012.center dist circle023.center < 0.00001)
+            return true
+
         if (!circle012.contains(p3))
             return true
 
-        val circle023 = CompGeom.circle3Points(p0, p2, p3)
         if (!circle023.contains(p1))
             return true
 
