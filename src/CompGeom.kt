@@ -106,7 +106,16 @@ object CompGeom {
     }
 
     fun edgeContains(p0: Point, p1: Point, pt: Point): Boolean {
-        return orientation(p0, pt, p1) == Orientation.COLLINEAR
+        if (orientation(p0, pt, p1) != Orientation.COLLINEAR)
+            return false
+
+        val dist0 = p0 dist pt
+        val dist1 = p1 dist pt
+        val dist = p0 dist p1
+
+        if (dist0 + dist1 == dist)
+            return true
+        return false
     }
 
     fun triangleBox(pts: List<Point>): List<Point> {
