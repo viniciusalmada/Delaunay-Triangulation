@@ -97,18 +97,12 @@ object CompGeom {
     }
 
     fun triangleContains(p0: Point, p1: Point, p2: Point, pt: Point): Boolean {
-        val ptInf = Point(abs(pt.x) * 10, pt.y)
 
-        val ab = checkLinesCrossing(p0, p1, pt, ptInf)
-        val bc = checkLinesCrossing(p1, p2, pt, ptInf)
-        val ca = checkLinesCrossing(p2, p0, pt, ptInf)
+        val ab = orientation(p0, p1, pt)
+        val bc = orientation(p1, p2, pt)
+        val ca = orientation(p2, p0, pt)
 
-        var count = 0
-        if (ab) count++
-        if (bc) count++
-        if (ca) count++
-
-        return count % 2 != 0
+        return ab == Orientation.LEFT && bc == Orientation.LEFT && ca == Orientation.LEFT
     }
 
     fun edgeContains(p0: Point, p1: Point, pt: Point): Boolean {
