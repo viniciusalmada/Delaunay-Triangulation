@@ -128,22 +128,21 @@ object CompGeom {
             val m = (maxX - minX) / 2.0
             val centerX = minX + m
             val centerY = minY + (maxY - minY) / 2.0
-            val center = Point(centerX, centerY)
-            val p0 = Point(-3.0 * m, -3.0 * m) + center
-            val p1 = Point(3.0 * m, 0.0) + center
-            val p2 = Point(0.0, 3.0 * m) + center
-
-            listOf(p0, p1, p2)
+            listBox(centerX, centerY, m)
         } else {
             val m = (maxY - minY) / 2.0
             val centerX = minX + (maxX - minX) / 2.0
             val centerY = minY + m
-            val center = Point(centerX, centerY)
-            val p0 = Point(-3.0 * m, -3.0 * m) + center
-            val p1 = Point(3.0 * m, 0.0) + center
-            val p2 = Point(0.0, 3.0 * m) + center
-
-            listOf(p0, p1, p2)
+            listBox(centerX, centerY, m)
         }
+    }
+
+    private fun listBox(centerX: Double, centerY: Double, m: Double): List<Point> {
+        val center = Point(centerX, centerY)
+        val p0 = Point(-3.0 * m, -3.0 * m) + center
+        val p1 = Point(3.0 * m, 0.0) + center
+        val p2 = Point(0.0, 3.0 * m) + center
+
+        return listOf(p0, p1, p2)
     }
 }
